@@ -148,9 +148,9 @@ def ker(part,part_2):
   output = 1
   for i in range(len(c)):
     if i > k:
-      output = output * (-(c[i-1][1] - c[k][1] + 1)*V + (c[i][0]-c[k][0]-1)*U)
+      output = output * (-(-c[i-1][1] + c[k][1] + 1)*V + (c[i][0]-c[k][0]-1)*U)
     if i < k:
-      output = output * (-(c[k][0] - c[i+1][0] + 1)*U + (c[i][1]-c[k][1]-1)*V)
+      output = output * (-(-c[k][0] + c[i+1][0] + 1)*U + (c[i][1]-c[k][1]-1)*V)
 
   return simplify(output)
 
