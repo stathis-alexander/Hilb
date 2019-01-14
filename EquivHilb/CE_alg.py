@@ -114,6 +114,67 @@ def new_box(part,part_2):
   
   raise ValueError("part_2",part_2,"not obtained from adding a box to part",part)
 
+# subpartition
+# input: two partitions as lists of positive integers
+# output: True if first partition is a subpartition of the second
+def subpartition(part1,part2):
+  if len(part1) > len(part2):
+    return False
+  
+  return all([part1[i] <= part2[i] for i in range(len(part1))])
+
+
+# qlist
+# input: a positive integer, a list of tuples, the first entry a coefficient and the second a paritition, a list of partitions of length pos int + len partitioons in second input
+# output: q(i) applied to every element of the input
+
+def qlist(i,nak_list,partitions):
+  outs = []
+  for x in nak_list:
+    outs.append([(simplify(x[0] * q_struct_const(i,x[1],part)),part) for part in partitions if subpartition(x[1], part)])
+
+  outclass = []
+  for out in outs:
+    for y in out:
+      inlist = False
+      for i in range(len(outclass)):
+        if y[1] == outclass[i][1]:
+          inlist = True
+          coef = simplify(y[0] + outclass[i][0])
+          outclass.pop(i)
+          outclass.insert(i,(coef,y[1]))
+          break
+
+      if not inlist:
+        outclass.append(y)
+
+  return outclass
+
+# q1list
+# input: a list of tuples, the first entry a coefficient and the second a partition
+# output: q1 applied to every element of the input
+def q1list(nak_list):
+  outs = []
+  for x in nak_list:
+    outs.append([(x[0] * y[0],y[1])for y in q1(x[1])])
+
+  outclass = []
+  for out in outs:
+    for y in out:
+      inlist = False
+      for i in range(len(outclass)):
+        if y[1] == outclass[i][1]:
+          inlist = True
+          coef = simplify(y[0] + outclass[i][0])
+          outclass.pop(i)
+          outclass.insert(i,(coef,y[1]))
+          break
+
+      if not inlist:
+        outclass.append(y)
+
+  return outclass
+
 # q1
 # input: a partition, part
 # output: the expression in the fixed point basis of the action of q_1 on part
@@ -150,7 +211,7 @@ def ker(part,part_2):
     if i > k:
       output = output * (-(-c[i-1][1] + c[k][1] + 1)*V + (c[i][0]-c[k][0]-1)*U)
     if i < k:
-      output = output * (-(-c[k][0] + c[i+1][0] + 1)*U + (c[i][1]-c[k][1]-1)*V)
+      output = output * (-(c[k][0] - c[i+1][0] + 1)*U + (c[i][1]-c[k][1]-1)*V)
 
   return simplify(output)
 
