@@ -40,3 +40,22 @@ print("nak(3,1) =",nak31)
 print("nak(2,2) =",nak22)
 print("nak(2,1,1) =",nak211)
 print("nak(4) =",nak4)
+
+print("Hilb(5):")
+partitions = [[5],[4,1],[3,2],[3,1,1],[2,2,1],[2,1,1,1],[1,1,1,1,1]]
+
+nak11111 = q1list(nak1111)
+nak41 = q1list(nak4)
+nak32 = qlist(2,nak3,partitions)
+nak311 = q1list(nak31)
+nak221 = q1list(nak22)
+nak2111 = q1list(nak211)
+nak5 = [(q_struct_const(5,[],lam),lam) for lam in partitions]
+
+print("nak(1,1,1,1,1) =",nak11111)
+print("nak(4,1) =",nak41)
+print("nak(3,2) =",nak32)
+print("nak(3,1,1) =",nak311)
+print("nak(2,2,1) =",nak221)
+print("nak(2,1,1,1) =",nak2111)
+print("nak(5) =",nak5)
