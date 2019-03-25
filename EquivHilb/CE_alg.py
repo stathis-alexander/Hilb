@@ -11,9 +11,9 @@
 from scipy.misc import comb
 from sympy import *
 from partitions import *
-import math
+from gen_lib import *
 
-X, Y, U, V = symbols("X Y U V")
+import math
 
 # w
 # input: an (x,y) corresponding to a monomial
