@@ -79,5 +79,3 @@ def compute_ch(list_of_fixedpoints):
   chs = [list(x) for x in list(zip(*chs))[1:-1]]
 
   return chs
-
-pass
