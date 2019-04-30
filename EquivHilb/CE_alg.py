@@ -15,6 +15,65 @@ from gen_lib import *
 
 import math
 
+# Some Global Variables
+PARTITIONS = {
+  1: [[1]],
+  2: [[2],[1,1]],
+  3: [[3],[2,1],[1,1,1]],
+  4: [[4],[3,1],[2,2],[2,1,1],[1,1,1,1]],
+  5: [[5],[4,1],[3,2],[3,1,1],[2,2,1],[2,1,1,1],[1,1,1,1,1]],
+  6: [[6],[5,1],[4,2],[4,1,1],[3,3],[3,2,1],[3,1,1,1],[2,2,2],[2,2,1,1],[2,1,1,1,1],[1,1,1,1,1,1]]
+}
+
+class NAKS:
+  NEW_NAKS = False
+  NAKS = {"1" : [(1,[1])]}
+
+  def __init__(self):
+    try:
+      with open("./naks","rb") as f:
+        self.NAKS = pickle.loads(f.read())
+    except IOError:
+      pass
+
+  def nak(self, part):
+    if part in self.NAKS:
+      return self.NAKS[part]
+
+    partition = part[:]
+    while partition and partition not in self.NAKS:
+      partition = partition[1:]
+
+    if not partition:
+      start = []
+      degrees = reversed([int(x) for x in part])
+      n = 0
+    else:
+      start = self.NAKS[partition]
+      degrees = reversed([int(x) for x in part[:part.rfind(partition)]])
+      n = sum([int(x) for x in partition])
+
+    for degree in degrees:
+      n = n + degree
+    
+      start = q(degree, start, PARTITIONS[n])
+      partition = str(degree) + partition
+      self.NAKS[partition] = start
+    
+    self.NEW_NAKS = True
+    return start
+
+  # this should be a destructor and not a method, but destructors in python MAKE ABSOLUTELY NO SENSE and DO NOT WORK AS EXPECTED, so it's not
+  def store(self):
+    if self.NEW_NAKS:
+      try:
+        with open("./naks","wb") as f:
+          f.write(pickle.dumps(self.NAKS))
+      except IOError:
+        pass
+      
+
+
 # w
 # input: an (x,y) corresponding to a monomial
 # output: the weight in U,V of the monomial
@@ -78,10 +137,8 @@ def q_struct_const(n,part,part_2):
 # q
 # input: the weight of the operator, i, and a partition, part, upon which it acts
 # output: the expression in the fixed point bais of the action of q_i on part
-def q(n,part):
-# generate new partitions
-# compute structure constant for each partition pair
-  return []
+def q(n,part,fps):
+  return qlist(n,part,fps)
 
 # clefts
 # input: a partition, part
@@ -129,9 +186,15 @@ def subpartition(part1,part2):
 # output: q(i) applied to every element of the input
 
 def qlist(i,nak_list,partitions):
+  if not nak_list:
+    return [(q_struct_const(i,[],lam),lam) for lam in partitions]
+  
   outs = []
   for x in nak_list:
-    outs.append([(simplify(x[0] * q_struct_const(i,x[1],part)),part) for part in partitions if subpartition(x[1], part)])
+    if i == 1:
+      outs.append([(simplify(x[0] * q1_struct_const(x[1],part)),part) for part in partitions if subpartition(x[1], part)])
+    else:
+      outs.append([(simplify(x[0] * q_struct_const(i,x[1],part)),part) for part in partitions if subpartition(x[1], part)])
 
   outclass = []
   for out in outs:
@@ -153,10 +216,10 @@ def qlist(i,nak_list,partitions):
 # q1list
 # input: a list of tuples, the first entry a coefficient and the second a partition
 # output: q1 applied to every element of the input
-def q1list(nak_list):
+def q1list(nak_list,fps):
   outs = []
   for x in nak_list:
-    outs.append([(x[0] * y[0],y[1])for y in q1(x[1])])
+    outs.append([(x[0] * y[0],y[1])for y in q1(x[1],fps)])
 
   outclass = []
   for out in outs:
@@ -178,8 +241,8 @@ def q1list(nak_list):
 # q1
 # input: a partition, part
 # output: the expression in the fixed point basis of the action of q_1 on part
-def q1(part):
-  return [(q1_struct_const(part,x),x) for x in gen_partitions_1(part)]
+def q1(part,fps):
+  return [(q1_struct_const(part,x),x) for x in fps]
 
 # q1_struct_const
 # input: a partition, part, and a partition, part_2, obtained by adding one box to part
