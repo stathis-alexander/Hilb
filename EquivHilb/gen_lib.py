@@ -4,6 +4,20 @@
 from sympy import *
 import math
 import pickle
+from fractions import Fraction
+
+# Some Global Variables
+PARTITIONS = {
+  1: [[1]],
+  2: [[2],[1,1]],
+  3: [[3],[2,1],[1,1,1]],
+  4: [[4],[3,1],[2,2],[2,1,1],[1,1,1,1]],
+  5: [[5],[4,1],[3,2],[3,1,1],[2,2,1],[2,1,1,1],[1,1,1,1,1]],
+  6: [[6],[5,1],[4,2],[4,1,1],[3,3],[3,2,1],[3,1,1,1],[2,2,2],[2,2,1,1],[2,1,1,1,1],[1,1,1,1,1,1]]
+}
+
+def passtr(part):
+   return "".join(str(x) for x in part)
 
 X, Y, U, V = symbols("X Y U V")
 # mult two fp elements together

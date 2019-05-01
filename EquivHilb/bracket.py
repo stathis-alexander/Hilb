@@ -49,22 +49,20 @@ elif num_points == 5:
   chob = Matrix([nak11111,nak2111,nak221,nak311,nak32,nak41,nak5])
 
 change_of_basis = load_or_compute(chob,matrix_file)
+nak = NAKS()
+
+print([(y,z) for y,z in zip(nak311, [x[0] for x in nak.nak("311")])] )
 
 
-testing = NAKS()
+#p1 = mult(nak211,nak211)
+#p2 = mult(nak2,nak11)
+#p3 = mult(nak21,nak21)
 
-print(nak41)
-print([u[0] for u in testing.nak("41")])
+#p2 = [simplify(x[0]) for x in qlist(2,zip(p2,fp2),fp4)]
+#p3 = [simplify(x[0]) for x in q1list(zip(p3,fp3))]
 
-p1 = mult(nak211,nak211)
-p2 = mult(nak2,nak11)
-p3 = mult(nak21,nak21)
-
-p2 = [simplify(x[0]) for x in qlist(2,zip(p2,fp2),fp4)]
-p3 = [simplify(x[0]) for x in q1list(zip(p3,fp3))]
-
-print(simplify( Matrix([p1]) * change_of_basis ))
-print(simplify( Matrix([p2]) * change_of_basis ))
-print(simplify( Matrix([p3]) * change_of_basis ))
+#print(simplify( Matrix([p1]) * change_of_basis ))
+#print(simplify( Matrix([p2]) * change_of_basis ))
+#print(simplify( Matrix([p3]) * change_of_basis ))
 
 

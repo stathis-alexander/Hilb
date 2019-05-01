@@ -15,19 +15,10 @@ from gen_lib import *
 
 import math
 
-# Some Global Variables
-PARTITIONS = {
-  1: [[1]],
-  2: [[2],[1,1]],
-  3: [[3],[2,1],[1,1,1]],
-  4: [[4],[3,1],[2,2],[2,1,1],[1,1,1,1]],
-  5: [[5],[4,1],[3,2],[3,1,1],[2,2,1],[2,1,1,1],[1,1,1,1,1]],
-  6: [[6],[5,1],[4,2],[4,1,1],[3,3],[3,2,1],[3,1,1,1],[2,2,2],[2,2,1,1],[2,1,1,1,1],[1,1,1,1,1,1]]
-}
 
 class NAKS:
   NEW_NAKS = False
-  NAKS = {"1" : [(1,[1])]}
+  NAKS = {"" : [], "1" : [(1,[1])]}
 
   def __init__(self):
     try:
@@ -55,13 +46,16 @@ class NAKS:
 
     for degree in degrees:
       n = n + degree
-    
+
       start = q(degree, start, PARTITIONS[n])
       partition = str(degree) + partition
       self.NAKS[partition] = start
     
     self.NEW_NAKS = True
     return start
+
+  def nak_nofp(self, part):
+    return [x[0] for x in self.nak(part)]
 
   # this should be a destructor and not a method, but destructors in python MAKE ABSOLUTELY NO SENSE and DO NOT WORK AS EXPECTED, so it's not
   def store(self):
@@ -107,7 +101,7 @@ def P_m(n,M):
         summand *= w(M[j])
     Pm += summand
   
-  Pm *= (-1)**(n-1) / int((math.factorial(n-1)))
+  Pm *= Fraction((-1)**(n-1), int((math.factorial(n-1))))
 
   return simplify(Pm)
 
@@ -120,6 +114,7 @@ def q_struct_const(n,part,part_2):
 
   for M in generate_M(part,part_2,[]):
     summand = P_m(n,M)
+    
     nu = part[:]
     for x in M:
       mu = []
@@ -130,7 +125,7 @@ def q_struct_const(n,part,part_2):
       summand *= q1_struct_const(nu,mu)
       nu = mu
 
-    output+= summand
+    output = simplify(output + summand)
   
   return simplify(output)
 
