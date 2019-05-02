@@ -17,12 +17,18 @@ PARTITIONS = {
 }
 
 def passtr(part):
-   return "".join(str(x) for x in part)
+  return "".join(str(x) for x in part)
 
 X, Y, U, V = symbols("X Y U V")
 # mult two fp elements together
+def mults(s,one):
+  return [s * x for x in one]
+
 def mult(one,two):
-   return [simplify(a*b) for a,b in zip(one,two)]
+  return [simplify(a*b) for a,b in zip(one,two)]
+
+def add(one,two):
+  return [simplify(a+b) for a,b in zip(one,two)]
 
 # compute inverse matrix or load it from file using pickle 
 def load_or_compute(chob, filename):
@@ -34,7 +40,7 @@ def load_or_compute(chob, filename):
       print("Matrix loaded from "+filename+".")
   except IOError as err:
     print("No saved matrix data in "+filename+".")
-    change_of_basis = simplify(chob.inv())
+    change_of_basis = cancel(chob.inv())
     with open(fn,"wb") as f:
       f.write(pickle.dumps(change_of_basis))
       print("Matrix data saved in "+filename+".")

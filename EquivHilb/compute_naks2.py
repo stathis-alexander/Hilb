@@ -8,7 +8,8 @@ nak = NAKS()
 
 for i in range(1,7):
   for part in PARTITIONS[i]:
-    partstr = "".join(str(x) for x in part) 
+    partstr = passtr(part)
     print(partstr + ": " +str(nak.nak(partstr)))
 
 nak.store()
+

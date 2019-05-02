@@ -4,7 +4,7 @@
 from CE_alg import *
 from partitions import *
 
-for num_points in range(2,7):
+for num_points in range(6,7):
   matrix_file = "rels" + str(num_points)
 
   nak = NAKS()
