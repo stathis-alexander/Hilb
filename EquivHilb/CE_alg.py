@@ -66,8 +66,6 @@ class NAKS:
       except IOError:
         pass
       
-
-
 # w
 # input: an (x,y) corresponding to a monomial
 # output: the weight in U,V of the monomial
@@ -186,7 +184,9 @@ def qlist(i,nak_list,partitions):
   
   outs = []
   for x in nak_list:
-    if i == 1:
+    if i == -1:
+      outs.append([(simplify(x[0] * qminus1_struct_const(part,x[1])),part) for part in partitions if subpartition(part,x[1])])
+    elif i == 1:
       outs.append([(simplify(x[0] * q1_struct_const(x[1],part)),part) for part in partitions if subpartition(x[1], part)])
     else:
       outs.append([(simplify(x[0] * q_struct_const(i,x[1],part)),part) for part in partitions if subpartition(x[1], part)])
@@ -208,30 +208,31 @@ def qlist(i,nak_list,partitions):
 
   return outclass
 
+#### The following is deprecated and has been replaced by qlist()
 # q1list
 # input: a list of tuples, the first entry a coefficient and the second a partition
 # output: q1 applied to every element of the input
-def q1list(nak_list,fps):
-  outs = []
-  for x in nak_list:
-    outs.append([(x[0] * y[0],y[1])for y in q1(x[1],fps)])
-
-  outclass = []
-  for out in outs:
-    for y in out:
-      inlist = False
-      for i in range(len(outclass)):
-        if y[1] == outclass[i][1]:
-          inlist = True
-          coef = simplify(y[0] + outclass[i][0])
-          outclass.pop(i)
-          outclass.insert(i,(coef,y[1]))
-          break
-
-      if not inlist:
-        outclass.append(y)
-
-  return outclass
+#def q1list(nak_list,fps):
+#  outs = []
+#  for x in nak_list:
+#    outs.append([(x[0] * y[0],y[1])for y in q1(x[1],fps)])
+#
+#  outclass = []
+#  for out in outs:
+#    for y in out:
+#      inlist = False
+#      for i in range(len(outclass)):
+#        if y[1] == outclass[i][1]:
+#          inlist = True
+#          coef = simplify(y[0] + outclass[i][0])
+#          outclass.pop(i)
+#          outclass.insert(i,(coef,y[1]))
+#          break
+#
+#      if not inlist:
+#        outclass.append(y)
+#
+#  return outclass
 
 # q1
 # input: a partition, part
@@ -245,6 +246,32 @@ def q1(part,fps):
 def q1_struct_const(part, part_2):
   return simplify(coker(part,part_2)/ker(part,part_2))
 
+# qminus1
+# input: a partition, mu, a list of fixed points of the hilbert scheme of one fewer points
+# output: the expression in the fixed point basis of the action of qminus1 on mu
+def qminus1(mu,fps):
+  return [(qminus1_struct_const(x,mu),x) for x in fps]
+
+# qminus1_struct_const
+# input: a partition, mu, and a partition, lam, obtained by removing a box from mu 
+# output: the structure constant for part_2 of q_-1 applied to part. 
+def qminus1_struct_const(lam,mu):
+  return simplify(tangent(lam)/tangent(mu)*coker(lam,mu)/ker(lam,mu))
+
+# tangent
+# input: a partition, part
+# output: the product of the weights of the tangent space to the fixed point corresponding to part
+def tangent(part):
+  output = 1
+  for i in range(len(part)):
+    for j in range(part[i]):
+      l = [x for x in part[(i+1):] if j < x]
+      
+      a = len(l)
+      b = part[i] - 1 - j
+      output *= (a*U - (b+1)*V)*(-(a+1)*U+b*V)
+
+  return output
 
 # coker
 # input: a partition, part, and a partition, part_2, obtained by adding one box to part
