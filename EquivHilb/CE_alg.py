@@ -33,7 +33,10 @@ class NAKS:
 
     partition = part[:]
     while partition and partition not in self.NAKS:
-      partition = partition[1:]
+      if partition[0] == "-":
+        partition = partition[2:]
+      else:
+        partition = partition[1:]
 
     if not partition:
       start = []

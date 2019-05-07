@@ -4,9 +4,11 @@
 from CE_alg import *
 from partitions import *
 
-n = 2
-m = 2
-k = 1
+## assume n > 0
+
+n = 1
+m = -1
+k = 2
 num_points = n + m + k
 matrix_file = "rels" + str(num_points)
 
@@ -15,8 +17,10 @@ nak = NAKS()
 chob = Matrix([nak.nak_nofp(x) for x in [passtr(P) for P in PARTITIONS[num_points]]])
 change_of_basis = load_or_compute(chob,matrix_file)
 
-A = nak.nak_nofp("2" + "1" * (n+m+k-2))
-B = nak.nak_nofp(str(max(n,m)) + str(min(n,m)) + "1" * k)
+A = q(m,nak.nak("1" * k),PARTITIONS[k+m])
+B = q(m,nak.nak("2" + "1" * (k-2)),PARTITIONS[k+m])
+
+
 C = nak.nak_nofp("2" + "1" * (m+k-2))
 D = nak.nak_nofp(str(m) + "1" * k)
 E = nak.nak_nofp("2" + "1" * (n+k-2))
