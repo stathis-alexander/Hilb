@@ -5,8 +5,8 @@ from CE_alg import *
 from partitions import *
 
 n = 2
-m = 2
-k = 1
+m = 1
+k = 2
 num_points = n + m + k
 matrix_file = "rels" + str(num_points)
 
