@@ -22,7 +22,7 @@ class NAKS:
 
   def __init__(self):
     try:
-      with open("./naks","rb") as f:
+      with open("./pickle_stores/naks","rb") as f:
         self.NAKS = pickle.loads(f.read())
     except IOError:
       pass

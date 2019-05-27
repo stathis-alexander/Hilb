@@ -32,7 +32,7 @@ def add(one,two):
 
 # compute inverse matrix or load it from file using pickle 
 def load_or_compute(chob, filename):
-  fn = "./" + filename
+  fn = "./pickle_stores/" + filename
   
   try:
     with open(fn,"rb") as f:
