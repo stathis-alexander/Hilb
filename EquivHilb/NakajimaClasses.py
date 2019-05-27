@@ -6,18 +6,18 @@
 #
 
 from CE_alg import *
-from partitions import *
+from partitions import PARTITION
 
-nstart = 1
-nstop = 6
+nstart = 7
+nstop = 7
 
 # Load NAKS class from CE_Alg.
 nak = NAKS()
 
 # This will print all the Nakajima classes in the fixed point basis
-# for n=1 to n=6. 
+# for n=nstart to n=nstop. 
 for i in range(nstart,nstop+1):
-  for part in PARTITIONS[i]:
+  for part in PARTITION(i):
     partstr = passtr(part)
     print(partstr + ": " +str(nak.nak(partstr)))
 
