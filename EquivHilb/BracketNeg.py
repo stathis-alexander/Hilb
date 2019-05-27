@@ -1,5 +1,9 @@
 #!/usr/bin/python
-# compute the chern characters in terms of nak basis for n points (up to 5) using CE's algorithm at fixed points
+#
+# This file computes the bracket [q_n',q_m](q_1^k(1)) in terms of thei
+# Nakajima classes. 1 is the vacuum vector. See 3.10 in Lehn's Chern 
+# Classes paper.
+#
 
 from CE_alg import *
 from partitions import *
@@ -9,6 +13,7 @@ from partitions import *
 n = 1
 m = -1
 k = 5
+
 num_points = n + m + k
 matrix_file = "rels" + str(num_points)
 
